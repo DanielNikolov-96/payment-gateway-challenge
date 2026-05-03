@@ -1,0 +1,17 @@
+server:
+  port: 8090
+
+springdoc:
+  swagger-ui:
+    enabled: true
+  api-docs:
+    enabled: true
+
+acquirerService:
+  baseUrl: http://localhost
+  port: 8080
+  endpoint: /payments
+
+httpClient:
+  connectTimeoutMs: 10000
+  readTimeoutMs: 10000
