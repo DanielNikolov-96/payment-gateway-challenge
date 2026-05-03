@@ -20,8 +20,9 @@ class PaymentValidationTest extends BaseValidationTest {
   @ParameterizedTest
   @ValueSource(strings = {"\t", "not a number", "123", "12345678901234567890"})
   void shouldFailWhenCardNumberInvalid(String invalidCardNumber) {
-    var request = validRequest();
-    request.setCardNumber(invalidCardNumber);
+    var request = validRequest()
+        .cardNumber(invalidCardNumber)
+        .build();
 
     var violations = validator.validate(request);
 
@@ -31,8 +32,9 @@ class PaymentValidationTest extends BaseValidationTest {
   @ParameterizedTest
   @ValueSource(strings = {"\t", "not a number", "0", "13"})
   void shouldFailWhenExpiryMonthInvalid(String invalidExpiryMonth) {
-    var request = validRequest();
-    request.setExpiryMonth(invalidExpiryMonth);
+    var request = validRequest()
+        .expiryMonth(invalidExpiryMonth)
+        .build();
 
     var violations = validator.validate(request);
 
@@ -42,8 +44,9 @@ class PaymentValidationTest extends BaseValidationTest {
   @ParameterizedTest
   @ValueSource(ints = {-1, 0})
   void shouldFailWhenExpiryYearInvalid(Integer invalidExpiryYear) {
-    var request = validRequest();
-    request.setExpiryYear(invalidExpiryYear);
+    var request = validRequest()
+        .expiryYear(invalidExpiryYear)
+        .build();
 
     var violations = validator.validate(request);
 
@@ -52,12 +55,13 @@ class PaymentValidationTest extends BaseValidationTest {
 
   @Test
   void shouldFailWhenFreshlyExpiredCard() {
-    var request = validRequest();
     YearMonth now = YearMonth.now(ZoneId.of("UTC"));
     YearMonth freshlyExpired = now.minusMonths(1);
 
-    request.setExpiryMonth(String.valueOf(freshlyExpired.getMonth().getValue()));
-    request.setExpiryYear(freshlyExpired.getYear());
+    var request = validRequest()
+        .expiryMonth(String.valueOf(freshlyExpired.getMonthValue()))
+        .expiryYear(freshlyExpired.getYear())
+        .build();
 
     var violations = validator.validate(request);
 
@@ -67,8 +71,9 @@ class PaymentValidationTest extends BaseValidationTest {
   @ParameterizedTest
   @ValueSource(strings = {"", "\t", "not a currency"})
   void shouldFailWhenCurrencyInvalid(String invalidCurrency) {
-    var request = validRequest();
-    request.setCurrency(invalidCurrency);
+    var request = validRequest()
+        .currency(invalidCurrency)
+        .build();
 
     var violations = validator.validate(request);
 
@@ -77,8 +82,9 @@ class PaymentValidationTest extends BaseValidationTest {
 
   @Test
   void shouldFailWhenAmountInvalid() {
-    var request = validRequest();
-    request.setAmount(-1L);
+    var request = validRequest()
+        .amount(-1L)
+        .build();
 
     var violations = validator.validate(request);
 
@@ -88,8 +94,9 @@ class PaymentValidationTest extends BaseValidationTest {
   @ParameterizedTest
   @ValueSource(strings = {"\t", "not a number", "1", "12345"})
   void shouldFailWhenCVVInvalid(String invalidCvv) {
-    var request = validRequest();
-    request.setCvv(invalidCvv);
+    var request = validRequest()
+        .cvv(invalidCvv)
+        .build();
 
     var violations = validator.validate(request);
 
@@ -98,8 +105,9 @@ class PaymentValidationTest extends BaseValidationTest {
 
   @Test
   void shouldFailWhenNoCardNumber() {
-    var request = validRequest();
-    request.setCardNumber(null);
+    var request = validRequest()
+        .cardNumber(null)
+        .build();
 
     var violations = validator.validate(request);
 
@@ -108,8 +116,9 @@ class PaymentValidationTest extends BaseValidationTest {
 
   @Test
   void shouldFailWhenNoExpiryMonth() {
-    var request = validRequest();
-    request.setExpiryMonth(null);
+    var request = validRequest()
+        .expiryMonth(null)
+        .build();
 
     var violations = validator.validate(request);
 
@@ -118,8 +127,9 @@ class PaymentValidationTest extends BaseValidationTest {
 
   @Test
   void shouldFailWhenNoExpiryYear() {
-    var request = validRequest();
-    request.setExpiryYear(null);
+    var request = validRequest()
+        .expiryYear(null)
+        .build();
 
     var violations = validator.validate(request);
 
@@ -128,8 +138,9 @@ class PaymentValidationTest extends BaseValidationTest {
 
   @Test
   void shouldFailWhenNoCurrency() {
-    var request = validRequest();
-    request.setCurrency(null);
+    var request = validRequest()
+        .currency(null)
+        .build();
 
     var violations = validator.validate(request);
 
@@ -138,8 +149,9 @@ class PaymentValidationTest extends BaseValidationTest {
 
   @Test
   void shouldFailWhenNoAmount() {
-    var request = validRequest();
-    request.setAmount(null);
+    var request = validRequest()
+        .amount(null)
+        .build();
 
     var violations = validator.validate(request);
 
@@ -148,12 +160,12 @@ class PaymentValidationTest extends BaseValidationTest {
 
   @Test
   void shouldFailWhenNoCvv() {
-    var request = validRequest();
-    request.setCvv(null);
+    var request = validRequest()
+        .cvv(null)
+        .build();
 
     var violations = validator.validate(request);
 
     assertThat(violations).isNotEmpty();
   }
-
 }

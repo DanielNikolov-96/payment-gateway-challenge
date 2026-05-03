@@ -1,4 +1,4 @@
-package com.checkout.payment.gateway.validation;
+package com.checkout.payment.gateway.validator;
 
 import com.checkout.payment.gateway.model.PostPaymentRequest;
 import jakarta.validation.ConstraintValidator;
@@ -12,11 +12,11 @@ public class ExpiryDateValidator implements ConstraintValidator<ValidExpiryDate,
   @Override
   public boolean isValid(PostPaymentRequest request, ConstraintValidatorContext context) {
     try {
-      if (request.getExpiryYear() < 0) {
-        throw new IllegalArgumentException("Expected expiryYear to be a positive number but was " + request.getExpiryYear());
+      if (request.expiryYear() < 0) {
+        throw new IllegalArgumentException("Expected expiryYear to be a positive number but was " + request.expiryYear());
       }
 
-      YearMonth expirationDate = YearMonth.of(request.getExpiryYear(), toNumericMonth(request.getExpiryMonth()));
+      YearMonth expirationDate = YearMonth.of(request.expiryYear(), toNumericMonth(request.expiryMonth()));
       YearMonth now = YearMonth.now(ZoneId.of("UTC"));
 
       if (expirationDate.isBefore(now)) {
