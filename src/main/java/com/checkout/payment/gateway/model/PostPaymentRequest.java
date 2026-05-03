@@ -1,5 +1,6 @@
 package com.checkout.payment.gateway.model;
 
+import com.checkout.payment.gateway.validator.ValidCurrency;
 import com.checkout.payment.gateway.validator.ValidExpiryDate;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
@@ -8,6 +9,7 @@ import jakarta.validation.constraints.*;
 import lombok.Builder;
 
 @ValidExpiryDate
+@ValidCurrency
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(SnakeCaseStrategy.class)
 @Builder
@@ -23,7 +25,6 @@ public record PostPaymentRequest(
     Integer expiryYear,
 
     @NotBlank(message = "Expected currency but none passed")
-    @Pattern(regexp = "^\\s*(USD|usd|EUR|eur)\\s*$", message = "Expected currency to be USD or EUR but was not")
     String currency,
 
     @NotNull(message = "Expected amount but none passed")
